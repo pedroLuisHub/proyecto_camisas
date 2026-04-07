@@ -1,13 +1,570 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mi-tienda-premium</title>
-  </head>
-  <body>
-    <div id="app"></div>
-    <script type="module" src="/src/main.js"></script>
-  </body>
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MatheoSport 2026 - Camisetas Premium</title>
+  <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+  <!-- <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            albirroja: '#D30026',
+            azulpy: '#0025D1',
+            dark: '#111111',
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            heading: ['Outfit', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script> -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@700;800;900&display=swap');
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    .cart-overlay {
+      background-color: rgba(0, 0, 0, 0.5);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .cart-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .cart-drawer {
+      transform: translateX(100%);
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .cart-drawer.active {
+      transform: translateX(0);
+    }
+
+    .product-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+    }
+
+    .cart-scroll::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    .cart-scroll::-webkit-scrollbar-thumb {
+      background-color: #e2e8f0;
+      border-radius: 10px;
+    }
+
+    .premium-bg {
+      background: linear-gradient(rgba(17, 17, 17, 0.7), rgba(17, 17, 17, 0.95)), url('https://images.unsplash.com/photo-1518605368461-1e1e38ce8e60?q=80&w=2000&auto=format&fit=crop') center/cover no-repeat;
+    }
+
+    .albirroja-bg-content {
+      background: linear-gradient(rgba(249, 250, 251, 0.94), rgba(249, 250, 251, 0.94)),
+        url('./mi-tienda-premium/images/albirroja_world_background.png') center/cover fixed no-repeat;
+    }
+  </style>
+</head>
+
+<body class="albirroja-bg-content text-gray-800 pt-20">
+
+  <!-- Header -->
+  <header class="fixed w-full bg-white/95 backdrop-blur-sm shadow-sm z-40 top-0 transition-all h-20 flex items-center">
+    <div class="container mx-auto px-4 md:px-6 flex justify-between items-center">
+      <div class="flex items-center gap-2 cursor-pointer" onclick="window.scrollTo(0,0)">
+        <img src="./mi-tienda-premium/images/logo_matheo_sport.png" alt="MatheoSport Logo"
+          class="h-12 md:h-16 w-auto object-contain">
+        <span
+          class="font-heading font-black text-xl md:text-2xl tracking-tighter text-dark uppercase">MatheoSport</span>
+      </div>
+
+      <nav class="hidden md:flex gap-8 font-semibold text-sm">
+        <a href="#shop" class="hover:text-albirroja transition">Selecciones</a>
+        <a href="#shop" class="hover:text-albirroja transition flex items-center gap-1">
+          <i class="fa-solid fa-star text-yellow-500 text-xs"></i> Calidad Premium
+        </a>
+        <a href="#footer" class="hover:text-albirroja transition">Contacto</a>
+      </nav>
+
+      <button id="cart-btn" class="relative p-2 text-dark hover:text-albirroja transition">
+        <i class="fa-solid fa-cart-shopping text-2xl"></i>
+        <span id="cart-count"
+          class="absolute -top-1 -right-1 bg-albirroja text-white text-[11px] font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-white hidden">0</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="premium-bg text-white py-24 md:py-32 px-4 text-center">
+    <div class="container mx-auto max-w-4xl">
+      <span
+        class="inline-block py-1.5 px-4 border border-white/30 rounded-full text-xs font-bold tracking-widest uppercase mb-6 backdrop-blur-sm">Mundial
+        2026</span>
+      <h1 class="font-heading text-4xl md:text-6xl lg:text-7xl font-black mb-6 leading-tight">MatheoSport: La Piel
+        de la Albirroja y el Mundo</h1>
+      <p class="text-xl md:text-2xl text-gray-300 mb-10 max-w-2xl mx-auto font-light block">Calidad Premium
+        garantizada. <br class="hidden md:block"> <span class="font-semibold text-white tracking-wide">Orgullosamente de
+          origen Paraguayo 🇵🇾 con envíos a
+          todo el país.</span></p>
+      <a href="#shop"
+        class="bg-albirroja hover:bg-red-700 text-white font-bold py-4 px-10 rounded-full transition inline-flex items-center gap-3 text-lg shadow-lg shadow-red-600/30">
+        <i class="fa-solid fa-bag-shopping"></i> Comprar Ahora
+      </a>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <main id="shop" class="container mx-auto px-4 md:px-6 py-16 flex flex-col md:flex-row gap-8">
+
+    <!-- Sidebar Filters -->
+    <aside class="w-full md:w-64 flex-shrink-0">
+      <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 sticky top-28">
+        <h3 class="font-heading font-bold text-lg mb-4 flex items-center gap-2">
+          <i class="fa-solid fa-filter text-gray-400"></i> Filtro por Talle
+        </h3>
+
+        <div class="space-y-5">
+          <div>
+            <h4 class="text-xs font-bold text-gray-400 mb-3 uppercase tracking-wider">Niños</h4>
+            <div class="flex flex-wrap gap-2" id="filter-kids"></div>
+          </div>
+          <div>
+            <h4 class="text-xs font-bold text-gray-400 mb-3 uppercase tracking-wider">Adultos</h4>
+            <div class="flex flex-wrap gap-2" id="filter-adults"></div>
+          </div>
+        </div>
+        <button id="clear-filters" class="w-full mt-6 text-sm text-gray-500 hover:text-albirroja underline hidden"><i
+            class="fa-solid fa-xmark mr-1"></i> Limpiar filtros</button>
+      </div>
+    </aside>
+
+    <!-- Product Grid -->
+    <div class="flex-1">
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-8 gap-4">
+        <h2 class="font-heading text-3xl font-bold text-dark">Colección 2026</h2>
+        <span id="results-count" class="text-sm font-medium text-gray-500 bg-gray-100 px-3 py-1 rounded-full"></span>
+      </div>
+
+      <div id="products-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Products JS -->
+      </div>
+
+      <div id="no-products" class="hidden text-center py-20 bg-white rounded-2xl border border-gray-100 shadow-sm">
+        <i class="fa-regular fa-face-frown text-5xl text-gray-300 mb-4"></i>
+        <h3 class="text-xl font-bold text-gray-600">No se encontraron productos</h3>
+        <p class="text-gray-400 mt-2">Intenta con otros talles.</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer id="footer" class="bg-dark text-white py-12 border-t-4 border-albirroja mt-10">
+    <div class="container mx-auto px-4 md:px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+      <div class="flex items-center gap-2">
+        <img src="./mi-tienda-premium/images/logo_matheo_sport.png" alt="MatheoSport Logo"
+          class="h-14 w-auto object-contain bg-white/10 rounded-lg p-1">
+        <span class="font-heading font-black text-2xl tracking-tighter uppercase">MatheoSport</span>
+      </div>
+      <p class="text-gray-400 font-medium text-center md:text-left">Indumentaria Premium de origen Paraguayo
+        🇵🇾.<br>Envíos garantizados a todo el país.</p>
+      <div class="flex gap-4">
+        <a href="#"
+          class="w-12 h-12 rounded-full bg-gray-800 flex items-center justify-center hover:bg-albirroja hover:scale-110 transition-all"><i
+            class="fa-brands fa-instagram text-xl"></i></a>
+        <a href="#"
+          class="w-12 h-12 rounded-full bg-gray-800 flex items-center justify-center hover:bg-albirroja hover:scale-110 transition-all"><i
+            class="fa-brands fa-facebook-f text-xl"></i></a>
+        <a href="#"
+          class="w-12 h-12 rounded-full bg-gray-800 flex items-center justify-center hover:bg-green-500 hover:scale-110 transition-all"><i
+            class="fa-brands fa-whatsapp text-xl"></i></a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Cart Drawer -->
+  <div id="cart-overlay" class="cart-overlay fixed inset-0 z-50"></div>
+  <div id="cart-drawer"
+    class="cart-drawer fixed top-0 right-0 h-full w-full sm:w-[420px] bg-white z-50 shadow-2xl flex flex-col">
+    <div class="p-5 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
+      <h2 class="font-heading text-xl font-bold flex items-center gap-3 text-dark">
+        <i class="fa-solid fa-bag-shopping text-albirroja"></i> Tu Carrito
+      </h2>
+      <button id="close-cart"
+        class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-200 text-gray-500 hover:bg-gray-300 hover:text-dark transition">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <div id="cart-items" class="flex-1 overflow-y-auto p-5 space-y-4 font-sans cart-scroll bg-gray-50/30">
+      <div class="text-center py-20 text-gray-400 hidden" id="empty-cart-msg">
+        <i class="fa-solid fa-cart-arrow-down text-6xl mb-4 text-gray-200"></i>
+        <p class="font-medium text-lg">Tu carrito está vacío.</p>
+        <button onclick="document.getElementById('close-cart').click(); window.location.href='#shop'"
+          class="mt-4 text-albirroja font-bold underline">Ir a la tienda</button>
+      </div>
+    </div>
+
+    <div class="p-6 border-t border-gray-100 bg-white">
+      <div class="flex justify-between items-center mb-6">
+        <span class="text-gray-500 font-bold uppercase tracking-wider text-sm">Total a Pagar:</span>
+        <span id="cart-total" class="font-heading font-black text-3xl text-dark">0 Gs.</span>
+      </div>
+
+      <div class="space-y-4">
+        <div class="relative">
+          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <i class="fa-regular fa-user text-gray-400"></i>
+          </div>
+          <input type="text" id="customer-name" placeholder="Tu Nombre y Apellido"
+            class="w-full pl-10 pr-4 py-3.5 rounded-xl border border-gray-200 font-medium focus:outline-none focus:border-albirroja focus:ring-1 focus:ring-albirroja transition bg-gray-50 focus:bg-white text-gray-800">
+        </div>
+
+        <button id="checkout-btn"
+          class="w-full bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold py-4 rounded-xl transition flex items-center justify-center gap-2 shadow-lg shadow-green-500/20 text-lg">
+          <i class="fa-brands fa-whatsapp text-2xl"></i> Finalizar Pedido
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+  <script>
+    // Database
+    const products = [
+      {
+        id: 1,
+        name: "Paraguay Home 2026",
+        price: 280000,
+        image: "https://placehold.co/600x800/D30026/ffffff?text=Paraguay+Home",
+        sizes: ["2", "4", "6", "8", "10", "12", "14", "P", "M", "G", "GG"]
+      },
+      {
+        id: 2,
+        name: "Argentina Home 2026",
+        price: 280000,
+        image: "https://placehold.co/600x800/75aadb/ffffff?text=Argentina+Home",
+        sizes: ["8", "10", "12", "14", "P", "M", "G", "GG"]
+      },
+      {
+        id: 3,
+        name: "Brasil Home 2026",
+        price: 280000,
+        image: "https://placehold.co/600x800/fedd00/009b3a?text=Brasil+Home",
+        sizes: ["P", "M", "G", "GG"]
+      },
+      {
+        id: 4,
+        name: "Portugal Home 2026",
+        price: 280000,
+        image: "https://placehold.co/600x800/E32636/006600?text=Portugal+Home",
+        sizes: ["6", "8", "10", "12", "14", "P", "M", "G"]
+      }
+    ];
+
+    const sizesKids = ["2", "4", "6", "8", "10", "12", "14"];
+    const sizesAdults = ["P", "M", "G", "GG"];
+
+    let activeFilters = [];
+    let cart = []; // { product, size, qty }
+
+    const formatPrice = (price) => {
+      return new Intl.NumberFormat('es-PY').format(price) + ' Gs.';
+    };
+
+    // Selectors
+    const productsContainer = document.getElementById('products-container');
+    const filterKidsContainer = document.getElementById('filter-kids');
+    const filterAdultsContainer = document.getElementById('filter-adults');
+    const clearFiltersBtn = document.getElementById('clear-filters');
+    const resultsCountTag = document.getElementById('results-count');
+    const noProductsTag = document.getElementById('no-products');
+
+    const cartBtn = document.getElementById('cart-btn');
+    const closeCartBtn = document.getElementById('close-cart');
+    const cartOverlay = document.getElementById('cart-overlay');
+    const cartDrawer = document.getElementById('cart-drawer');
+    const cartItemsContainer = document.getElementById('cart-items');
+    const cartCount = document.getElementById('cart-count');
+    const cartTotal = document.getElementById('cart-total');
+    const checkoutBtn = document.getElementById('checkout-btn');
+    const customerName = document.getElementById('customer-name');
+    const emptyCartMsg = document.getElementById('empty-cart-msg');
+
+    // Init
+    const init = () => {
+      renderFilters();
+      renderProducts(products);
+      setupEventListeners();
+      updateCartUI();
+    };
+
+    const renderFilters = () => {
+      const createFilterBtn = (size, container) => {
+        const btn = document.createElement('button');
+        btn.className = 'w-10 h-10 rounded-lg bg-gray-50 border border-gray-200 text-sm font-bold text-gray-600 flex items-center justify-center transition-all hover:border-albirroja hover:text-albirroja toggle-size-btn';
+        btn.dataset.size = size;
+        btn.innerText = size;
+        btn.addEventListener('click', () => toggleFilter(size, btn));
+        container.appendChild(btn);
+      };
+
+      sizesKids.forEach(size => createFilterBtn(size, filterKidsContainer));
+      sizesAdults.forEach(size => createFilterBtn(size, filterAdultsContainer));
+    };
+
+    const toggleFilter = (size, btnHTML) => {
+      if (activeFilters.includes(size)) {
+        activeFilters = activeFilters.filter(s => s !== size);
+        btnHTML.classList.remove('bg-albirroja', 'text-white', 'border-albirroja', 'shadow-md');
+        btnHTML.classList.add('bg-gray-50', 'text-gray-600', 'border-gray-200');
+      } else {
+        activeFilters.push(size);
+        btnHTML.classList.remove('bg-gray-50', 'text-gray-600', 'border-gray-200');
+        btnHTML.classList.add('bg-albirroja', 'text-white', 'border-albirroja', 'shadow-md');
+      }
+
+      if (activeFilters.length > 0) {
+        clearFiltersBtn.classList.remove('hidden');
+      } else {
+        clearFiltersBtn.classList.add('hidden');
+      }
+
+      applyFilters();
+    };
+
+    clearFiltersBtn.addEventListener('click', () => {
+      activeFilters = [];
+      document.querySelectorAll('.toggle-size-btn').forEach(btn => {
+        btn.classList.remove('bg-albirroja', 'text-white', 'border-albirroja', 'shadow-md');
+        btn.classList.add('bg-gray-50', 'text-gray-600', 'border-gray-200');
+      });
+      clearFiltersBtn.classList.add('hidden');
+      applyFilters();
+    });
+
+    const applyFilters = () => {
+      if (activeFilters.length === 0) {
+        renderProducts(products);
+        return;
+      }
+
+      const filtered = products.filter(p => {
+        return activeFilters.some(filterSize => p.sizes.includes(filterSize));
+      });
+
+      renderProducts(filtered);
+    };
+
+    const renderProducts = (items) => {
+      productsContainer.innerHTML = '';
+      resultsCountTag.innerText = `${items.length} producto${items.length !== 1 ? 's' : ''}`;
+
+      if (items.length === 0) {
+        productsContainer.classList.add('hidden');
+        noProductsTag.classList.remove('hidden');
+        return;
+      }
+
+      productsContainer.classList.remove('hidden');
+      noProductsTag.classList.add('hidden');
+
+      items.forEach(product => {
+        const sizesHTML = product.sizes.map(size => `<option value="${size}">${size}</option>`).join('');
+
+        const card = document.createElement('div');
+        card.className = 'product-card bg-white rounded-2xl overflow-hidden border border-gray-100 flex flex-col group';
+        card.innerHTML = `
+                    <div class="relative overflow-hidden aspect-[4/5] bg-gray-100">
+                        <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover group-hover:scale-110 transition duration-700 ease-in-out">
+                        <div class="absolute top-4 left-4 bg-dark text-white text-[10px] uppercase font-bold px-3 py-1.5 rounded flex items-center gap-1.5 backdrop-blur-md bg-dark/90">
+                            <i class="fa-solid fa-gem text-albirroja"></i> Premium Quality
+                        </div>
+                    </div>
+                    <div class="p-6 flex flex-col flex-1 bg-white">
+                        <h3 class="font-heading font-black text-xl mb-1 text-dark truncate">${product.name}</h3>
+                        <p class="font-bold text-albirroja text-xl mb-5">${formatPrice(product.price)}</p>
+                        
+                        <div class="mt-auto space-y-3">
+                            <div class="relative">
+                                <label class="text-xs text-gray-500 font-bold uppercase tracking-wide mb-1.5 block">Seleccionar Talle</label>
+                                <select class="w-full appearance-none bg-gray-50 border border-gray-200 text-dark font-medium rounded-xl px-4 py-3 focus:outline-none focus:border-albirroja focus:ring-1 focus:ring-albirroja transition" id="size-${product.id}">
+                                    ${sizesHTML}
+                                </select>
+                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 pt-6 text-gray-500">
+                                    <i class="fa-solid fa-chevron-down text-xs"></i>
+                                </div>
+                            </div>
+                            <button class="w-full bg-dark hover:bg-albirroja text-white font-bold py-3.5 rounded-xl transition-colors duration-300 flex items-center justify-center gap-2 group-hover:shadow-lg" onclick="addToCart(${product.id})">
+                                <i class="fa-solid fa-cart-plus"></i> Agregar al Carrito
+                            </button>
+                        </div>
+                    </div>
+                `;
+        productsContainer.appendChild(card);
+      });
+    };
+
+    const addToCart = (productId) => {
+      const product = products.find(p => p.id === productId);
+      const sizeSelector = document.getElementById(`size-${productId}`);
+      const selectedSize = sizeSelector.value;
+
+      const existingItem = cart.find(item => item.product.id === productId && item.size === selectedSize);
+
+      if (existingItem) {
+        existingItem.qty += 1;
+      } else {
+        cart.push({
+          product,
+          size: selectedSize,
+          qty: 1
+        });
+      }
+
+      updateCartUI();
+      openCart();
+    };
+
+    const updateCartQty = (index, delta) => {
+      cart[index].qty += delta;
+      if (cart[index].qty <= 0) {
+        cart.splice(index, 1);
+      }
+      updateCartUI();
+    };
+
+    const removeCartItem = (index) => {
+      cart.splice(index, 1);
+      updateCartUI();
+    };
+
+    const updateCartUI = () => {
+      cartItemsContainer.innerHTML = '';
+
+      let totalQty = 0;
+      let totalPrice = 0;
+
+      if (cart.length === 0) {
+        emptyCartMsg.classList.remove('hidden');
+      } else {
+        emptyCartMsg.classList.add('hidden');
+
+        cart.forEach((item, index) => {
+          totalQty += item.qty;
+          totalPrice += (item.product.price * item.qty);
+
+          const itemEl = document.createElement('div');
+          itemEl.className = 'flex gap-4 bg-white p-4 rounded-2xl border border-gray-100 shadow-sm relative group';
+          itemEl.innerHTML = `
+                        <img src="${item.product.image}" class="w-20 h-24 object-cover rounded-xl bg-gray-50 border border-gray-100">
+                        <div class="flex-1 flex flex-col justify-between">
+                            <div class="pr-6">
+                                <h4 class="font-bold text-sm text-dark leading-snug">${item.product.name}</h4>
+                                <p class="text-xs text-gray-500 mt-1 uppercase font-semibold">Talle: <span class="text-albirroja">${item.size}</span></p>
+                            </div>
+                            
+                            <button onclick="removeCartItem(${index})" class="absolute top-4 right-4 text-gray-300 hover:text-red-500 transition"><i class="fa-solid fa-trash-can"></i></button>
+                            
+                            <div class="flex justify-between items-end mt-2">
+                                <p class="font-bold text-dark text-sm">${formatPrice(item.product.price)}</p>
+                                
+                                <div class="flex items-center gap-3 bg-gray-50 rounded-lg p-1 border border-gray-200">
+                                    <button class="w-7 h-7 flex items-center justify-center rounded-md bg-white shadow-sm hover:text-albirroja text-gray-600 transition" onclick="updateCartQty(${index}, -1)">
+                                        <i class="fa-solid fa-minus text-[10px]"></i>
+                                    </button>
+                                    <span class="text-sm font-bold w-4 text-center text-dark">${item.qty}</span>
+                                    <button class="w-7 h-7 flex items-center justify-center rounded-md bg-white shadow-sm hover:text-albirroja text-gray-600 transition" onclick="updateCartQty(${index}, 1)">
+                                        <i class="fa-solid fa-plus text-[10px]"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+          cartItemsContainer.appendChild(itemEl);
+        });
+      }
+
+      cartCount.innerText = totalQty;
+
+      if (totalQty > 0) {
+        cartCount.classList.remove('hidden');
+      } else {
+        cartCount.classList.add('hidden');
+      }
+
+      cartTotal.innerText = formatPrice(totalPrice);
+    };
+
+    const setupEventListeners = () => {
+      cartBtn.addEventListener('click', openCart);
+      closeCartBtn.addEventListener('click', closeCart);
+      cartOverlay.addEventListener('click', closeCart);
+
+      checkoutBtn.addEventListener('click', () => {
+        if (cart.length === 0) {
+          alert('Tu carrito está vacío. Agrega productos para continuar.');
+          return;
+        }
+
+        const name = customerName.value.trim();
+        if (!name) {
+          alert('Por favor, ingresa tu nombre y apellido para enviar el pedido.');
+          customerName.focus();
+          return;
+        }
+
+        formatearYEnviarWhatsApp(name);
+      });
+    };
+
+    const openCart = () => {
+      cartOverlay.classList.add('active');
+      cartDrawer.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    };
+
+    const closeCart = () => {
+      cartOverlay.classList.remove('active');
+      cartDrawer.classList.remove('active');
+      document.body.style.overflow = '';
+    };
+
+    const formatearYEnviarWhatsApp = (name) => {
+      let mensaje = `*¡Hola! Quiero realizar este pedido en MatheoSport:*\n\n`;
+      let total = 0;
+
+      cart.forEach(item => {
+        const subtotal = item.product.price * item.qty;
+        total += subtotal;
+        mensaje += `👕 *${item.product.name}*\n`;
+        mensaje += `▫️ Talle: ${item.size}\n`;
+        mensaje += `▫️ Cantidad: ${item.qty}\n`;
+        mensaje += `▫️ Subtotal: ${formatPrice(subtotal)}\n\n`;
+      });
+
+      mensaje += `💰 *TOTAL A PAGAR: ${formatPrice(total)}*\n\n`;
+      mensaje += `👤 *Mis datos:* ${name}`;
+
+      const numeroWhatsApp = "595981000000"; // Número Paraguay
+      const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensaje)}`;
+
+      window.open(url, '_blank');
+    };
+
+    // Run
+    init();
+  </script>
+</body>
+
 </html>
