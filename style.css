@@ -46,7 +46,7 @@ html {
 
 .albirroja-bg-content {
   background: linear-gradient(rgba(249, 250, 251, 0.94), rgba(249, 250, 251, 0.94)),
-    url('/images/albirroja_world_background.png') center/cover fixed no-repeat;
+    url('images/albirroja_world_background.png') center/cover fixed no-repeat;
 }
 
 #image-viewer {
