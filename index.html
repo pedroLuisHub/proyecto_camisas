@@ -24,57 +24,7 @@
     }
   </script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@700;800;900&display=swap');
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    .cart-overlay {
-      background-color: rgba(0, 0, 0, 0.5);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s ease;
-    }
-
-    .cart-overlay.active {
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    .cart-drawer {
-      transform: translateX(100%);
-      transition: transform 0.3s ease-in-out;
-    }
-
-    .cart-drawer.active {
-      transform: translateX(0);
-    }
-
-    .product-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
-    }
-
-    .cart-scroll::-webkit-scrollbar {
-      width: 5px;
-    }
-
-    .cart-scroll::-webkit-scrollbar-thumb {
-      background-color: #e2e8f0;
-      border-radius: 10px;
-    }
-
-    .premium-bg {
-      background: linear-gradient(rgba(17, 17, 17, 0.7), rgba(17, 17, 17, 0.95)), url('https://images.unsplash.com/photo-1518605368461-1e1e38ce8e60?q=80&w=2000&auto=format&fit=crop') center/cover no-repeat;
-    }
-
-    .albirroja-bg-content {
-      background: linear-gradient(rgba(249, 250, 251, 0.94), rgba(249, 250, 251, 0.94)),
-        url('./mi-tienda-premium/images/albirroja_world_background.png') center/cover fixed no-repeat;
-    }
-  </style>
+  <link href="./src/style.css" rel="stylesheet">
 </head>
 
 <body class="albirroja-bg-content text-gray-800 pt-20">
@@ -83,7 +33,7 @@
   <header class="fixed w-full bg-white/95 backdrop-blur-sm shadow-sm z-40 top-0 transition-all h-20 flex items-center">
     <div class="container mx-auto px-4 md:px-6 flex justify-between items-center">
       <div class="flex items-center gap-2 cursor-pointer" onclick="window.scrollTo(0,0)">
-        <img src="./mi-tienda-premium/images/logo_matheo_sport.png" alt="MatheoSport Logo"
+        <img src="./public/images/logo_matheo_sport.png" alt="MatheoSport Logo"
           class="h-12 md:h-16 w-auto object-contain">
         <span
           class="font-heading font-black text-xl md:text-2xl tracking-tighter text-dark uppercase">MatheoSport</span>
@@ -172,7 +122,7 @@
   <footer id="footer" class="bg-dark text-white py-12 border-t-4 border-albirroja mt-10">
     <div class="container mx-auto px-4 md:px-6 flex flex-col md:flex-row justify-between items-center gap-6">
       <div class="flex items-center gap-2">
-        <img src="./mi-tienda-premium/images/logo_matheo_sport.png" alt="MatheoSport Logo"
+        <img src="./public/images/logo_matheo_sport.png" alt="MatheoSport Logo"
           class="h-14 w-auto object-contain bg-white/10 rounded-lg p-1">
         <span class="font-heading font-black text-2xl tracking-tighter uppercase">MatheoSport</span>
       </div>
@@ -191,6 +141,23 @@
       </div>
     </div>
   </footer>
+
+  <!-- Image Viewer Modal -->
+  <div id="image-viewer" class="fixed inset-0 z-[60] bg-dark/95 backdrop-blur-md hidden items-center justify-center p-4 md:p-10 transition-all duration-300">
+    <button id="close-viewer" class="absolute top-6 right-6 w-12 h-12 rounded-full bg-white/10 text-white hover:bg-white/20 transition flex items-center justify-center z-[70]">
+      <i class="fa-solid fa-xmark text-2xl"></i>
+    </button>
+    
+    <div class="relative w-full h-full flex items-center justify-center overflow-hidden">
+        <img id="viewer-img" src="" alt="Vista ampliada" class="max-w-full max-h-full object-contain cursor-zoom-in transition-transform duration-300" style="transform-origin: center center;">
+    </div>
+    
+    <div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex items-center gap-4 bg-dark/50 backdrop-blur-md border border-white/10 rounded-full px-6 py-3 text-white text-xs font-bold uppercase tracking-widest z-[70]">
+        <span class="flex items-center gap-2"><i class="fa-solid fa-magnifying-glass-plus text-albirroja"></i> Click para Zoom</span>
+        <div class="w-px h-4 bg-white/20"></div>
+        <span id="viewer-name">Nombre del producto</span>
+    </div>
+  </div>
 
   <!-- Cart Drawer -->
   <div id="cart-overlay" class="cart-overlay fixed inset-0 z-50"></div>
@@ -238,333 +205,7 @@
     </div>
   </div>
 
-
-  <script>
-    // Database
-    const products = [
-      {
-        id: 1,
-        name: "Paraguay Home 2026",
-        price: 280000,
-        image: "https://placehold.co/600x800/D30026/ffffff?text=Paraguay+Home",
-        sizes: ["2", "4", "6", "8", "10", "12", "14", "P", "M", "G", "GG"]
-      },
-      {
-        id: 2,
-        name: "Argentina Home 2026",
-        price: 280000,
-        image: "https://placehold.co/600x800/75aadb/ffffff?text=Argentina+Home",
-        sizes: ["8", "10", "12", "14", "P", "M", "G", "GG"]
-      },
-      {
-        id: 3,
-        name: "Brasil Home 2026",
-        price: 280000,
-        image: "https://placehold.co/600x800/fedd00/009b3a?text=Brasil+Home",
-        sizes: ["P", "M", "G", "GG"]
-      },
-      {
-        id: 4,
-        name: "Portugal Home 2026",
-        price: 280000,
-        image: "https://placehold.co/600x800/E32636/006600?text=Portugal+Home",
-        sizes: ["6", "8", "10", "12", "14", "P", "M", "G"]
-      }
-    ];
-
-    const sizesKids = ["2", "4", "6", "8", "10", "12", "14"];
-    const sizesAdults = ["P", "M", "G", "GG"];
-
-    let activeFilters = [];
-    let cart = []; // { product, size, qty }
-
-    const formatPrice = (price) => {
-      return new Intl.NumberFormat('es-PY').format(price) + ' Gs.';
-    };
-
-    // Selectors
-    const productsContainer = document.getElementById('products-container');
-    const filterKidsContainer = document.getElementById('filter-kids');
-    const filterAdultsContainer = document.getElementById('filter-adults');
-    const clearFiltersBtn = document.getElementById('clear-filters');
-    const resultsCountTag = document.getElementById('results-count');
-    const noProductsTag = document.getElementById('no-products');
-
-    const cartBtn = document.getElementById('cart-btn');
-    const closeCartBtn = document.getElementById('close-cart');
-    const cartOverlay = document.getElementById('cart-overlay');
-    const cartDrawer = document.getElementById('cart-drawer');
-    const cartItemsContainer = document.getElementById('cart-items');
-    const cartCount = document.getElementById('cart-count');
-    const cartTotal = document.getElementById('cart-total');
-    const checkoutBtn = document.getElementById('checkout-btn');
-    const customerName = document.getElementById('customer-name');
-    const emptyCartMsg = document.getElementById('empty-cart-msg');
-
-    // Init
-    const init = () => {
-      renderFilters();
-      renderProducts(products);
-      setupEventListeners();
-      updateCartUI();
-    };
-
-    const renderFilters = () => {
-      const createFilterBtn = (size, container) => {
-        const btn = document.createElement('button');
-        btn.className = 'w-10 h-10 rounded-lg bg-gray-50 border border-gray-200 text-sm font-bold text-gray-600 flex items-center justify-center transition-all hover:border-albirroja hover:text-albirroja toggle-size-btn';
-        btn.dataset.size = size;
-        btn.innerText = size;
-        btn.addEventListener('click', () => toggleFilter(size, btn));
-        container.appendChild(btn);
-      };
-
-      sizesKids.forEach(size => createFilterBtn(size, filterKidsContainer));
-      sizesAdults.forEach(size => createFilterBtn(size, filterAdultsContainer));
-    };
-
-    const toggleFilter = (size, btnHTML) => {
-      if (activeFilters.includes(size)) {
-        activeFilters = activeFilters.filter(s => s !== size);
-        btnHTML.classList.remove('bg-albirroja', 'text-white', 'border-albirroja', 'shadow-md');
-        btnHTML.classList.add('bg-gray-50', 'text-gray-600', 'border-gray-200');
-      } else {
-        activeFilters.push(size);
-        btnHTML.classList.remove('bg-gray-50', 'text-gray-600', 'border-gray-200');
-        btnHTML.classList.add('bg-albirroja', 'text-white', 'border-albirroja', 'shadow-md');
-      }
-
-      if (activeFilters.length > 0) {
-        clearFiltersBtn.classList.remove('hidden');
-      } else {
-        clearFiltersBtn.classList.add('hidden');
-      }
-
-      applyFilters();
-    };
-
-    clearFiltersBtn.addEventListener('click', () => {
-      activeFilters = [];
-      document.querySelectorAll('.toggle-size-btn').forEach(btn => {
-        btn.classList.remove('bg-albirroja', 'text-white', 'border-albirroja', 'shadow-md');
-        btn.classList.add('bg-gray-50', 'text-gray-600', 'border-gray-200');
-      });
-      clearFiltersBtn.classList.add('hidden');
-      applyFilters();
-    });
-
-    const applyFilters = () => {
-      if (activeFilters.length === 0) {
-        renderProducts(products);
-        return;
-      }
-
-      const filtered = products.filter(p => {
-        return activeFilters.some(filterSize => p.sizes.includes(filterSize));
-      });
-
-      renderProducts(filtered);
-    };
-
-    const renderProducts = (items) => {
-      productsContainer.innerHTML = '';
-      resultsCountTag.innerText = `${items.length} producto${items.length !== 1 ? 's' : ''}`;
-
-      if (items.length === 0) {
-        productsContainer.classList.add('hidden');
-        noProductsTag.classList.remove('hidden');
-        return;
-      }
-
-      productsContainer.classList.remove('hidden');
-      noProductsTag.classList.add('hidden');
-
-      items.forEach(product => {
-        const sizesHTML = product.sizes.map(size => `<option value="${size}">${size}</option>`).join('');
-
-        const card = document.createElement('div');
-        card.className = 'product-card bg-white rounded-2xl overflow-hidden border border-gray-100 flex flex-col group';
-        card.innerHTML = `
-                    <div class="relative overflow-hidden aspect-[4/5] bg-gray-100">
-                        <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover group-hover:scale-110 transition duration-700 ease-in-out">
-                        <div class="absolute top-4 left-4 bg-dark text-white text-[10px] uppercase font-bold px-3 py-1.5 rounded flex items-center gap-1.5 backdrop-blur-md bg-dark/90">
-                            <i class="fa-solid fa-gem text-albirroja"></i> Premium Quality
-                        </div>
-                    </div>
-                    <div class="p-6 flex flex-col flex-1 bg-white">
-                        <h3 class="font-heading font-black text-xl mb-1 text-dark truncate">${product.name}</h3>
-                        <p class="font-bold text-albirroja text-xl mb-5">${formatPrice(product.price)}</p>
-                        
-                        <div class="mt-auto space-y-3">
-                            <div class="relative">
-                                <label class="text-xs text-gray-500 font-bold uppercase tracking-wide mb-1.5 block">Seleccionar Talle</label>
-                                <select class="w-full appearance-none bg-gray-50 border border-gray-200 text-dark font-medium rounded-xl px-4 py-3 focus:outline-none focus:border-albirroja focus:ring-1 focus:ring-albirroja transition" id="size-${product.id}">
-                                    ${sizesHTML}
-                                </select>
-                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 pt-6 text-gray-500">
-                                    <i class="fa-solid fa-chevron-down text-xs"></i>
-                                </div>
-                            </div>
-                            <button class="w-full bg-dark hover:bg-albirroja text-white font-bold py-3.5 rounded-xl transition-colors duration-300 flex items-center justify-center gap-2 group-hover:shadow-lg" onclick="addToCart(${product.id})">
-                                <i class="fa-solid fa-cart-plus"></i> Agregar al Carrito
-                            </button>
-                        </div>
-                    </div>
-                `;
-        productsContainer.appendChild(card);
-      });
-    };
-
-    const addToCart = (productId) => {
-      const product = products.find(p => p.id === productId);
-      const sizeSelector = document.getElementById(`size-${productId}`);
-      const selectedSize = sizeSelector.value;
-
-      const existingItem = cart.find(item => item.product.id === productId && item.size === selectedSize);
-
-      if (existingItem) {
-        existingItem.qty += 1;
-      } else {
-        cart.push({
-          product,
-          size: selectedSize,
-          qty: 1
-        });
-      }
-
-      updateCartUI();
-      openCart();
-    };
-
-    const updateCartQty = (index, delta) => {
-      cart[index].qty += delta;
-      if (cart[index].qty <= 0) {
-        cart.splice(index, 1);
-      }
-      updateCartUI();
-    };
-
-    const removeCartItem = (index) => {
-      cart.splice(index, 1);
-      updateCartUI();
-    };
-
-    const updateCartUI = () => {
-      cartItemsContainer.innerHTML = '';
-
-      let totalQty = 0;
-      let totalPrice = 0;
-
-      if (cart.length === 0) {
-        emptyCartMsg.classList.remove('hidden');
-      } else {
-        emptyCartMsg.classList.add('hidden');
-
-        cart.forEach((item, index) => {
-          totalQty += item.qty;
-          totalPrice += (item.product.price * item.qty);
-
-          const itemEl = document.createElement('div');
-          itemEl.className = 'flex gap-4 bg-white p-4 rounded-2xl border border-gray-100 shadow-sm relative group';
-          itemEl.innerHTML = `
-                        <img src="${item.product.image}" class="w-20 h-24 object-cover rounded-xl bg-gray-50 border border-gray-100">
-                        <div class="flex-1 flex flex-col justify-between">
-                            <div class="pr-6">
-                                <h4 class="font-bold text-sm text-dark leading-snug">${item.product.name}</h4>
-                                <p class="text-xs text-gray-500 mt-1 uppercase font-semibold">Talle: <span class="text-albirroja">${item.size}</span></p>
-                            </div>
-                            
-                            <button onclick="removeCartItem(${index})" class="absolute top-4 right-4 text-gray-300 hover:text-red-500 transition"><i class="fa-solid fa-trash-can"></i></button>
-                            
-                            <div class="flex justify-between items-end mt-2">
-                                <p class="font-bold text-dark text-sm">${formatPrice(item.product.price)}</p>
-                                
-                                <div class="flex items-center gap-3 bg-gray-50 rounded-lg p-1 border border-gray-200">
-                                    <button class="w-7 h-7 flex items-center justify-center rounded-md bg-white shadow-sm hover:text-albirroja text-gray-600 transition" onclick="updateCartQty(${index}, -1)">
-                                        <i class="fa-solid fa-minus text-[10px]"></i>
-                                    </button>
-                                    <span class="text-sm font-bold w-4 text-center text-dark">${item.qty}</span>
-                                    <button class="w-7 h-7 flex items-center justify-center rounded-md bg-white shadow-sm hover:text-albirroja text-gray-600 transition" onclick="updateCartQty(${index}, 1)">
-                                        <i class="fa-solid fa-plus text-[10px]"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-          cartItemsContainer.appendChild(itemEl);
-        });
-      }
-
-      cartCount.innerText = totalQty;
-
-      if (totalQty > 0) {
-        cartCount.classList.remove('hidden');
-      } else {
-        cartCount.classList.add('hidden');
-      }
-
-      cartTotal.innerText = formatPrice(totalPrice);
-    };
-
-    const setupEventListeners = () => {
-      cartBtn.addEventListener('click', openCart);
-      closeCartBtn.addEventListener('click', closeCart);
-      cartOverlay.addEventListener('click', closeCart);
-
-      checkoutBtn.addEventListener('click', () => {
-        if (cart.length === 0) {
-          alert('Tu carrito está vacío. Agrega productos para continuar.');
-          return;
-        }
-
-        const name = customerName.value.trim();
-        if (!name) {
-          alert('Por favor, ingresa tu nombre y apellido para enviar el pedido.');
-          customerName.focus();
-          return;
-        }
-
-        formatearYEnviarWhatsApp(name);
-      });
-    };
-
-    const openCart = () => {
-      cartOverlay.classList.add('active');
-      cartDrawer.classList.add('active');
-      document.body.style.overflow = 'hidden';
-    };
-
-    const closeCart = () => {
-      cartOverlay.classList.remove('active');
-      cartDrawer.classList.remove('active');
-      document.body.style.overflow = '';
-    };
-
-    const formatearYEnviarWhatsApp = (name) => {
-      let mensaje = `*¡Hola! Quiero realizar este pedido en MatheoSport:*\n\n`;
-      let total = 0;
-
-      cart.forEach(item => {
-        const subtotal = item.product.price * item.qty;
-        total += subtotal;
-        mensaje += `👕 *${item.product.name}*\n`;
-        mensaje += `▫️ Talle: ${item.size}\n`;
-        mensaje += `▫️ Cantidad: ${item.qty}\n`;
-        mensaje += `▫️ Subtotal: ${formatPrice(subtotal)}\n\n`;
-      });
-
-      mensaje += `💰 *TOTAL A PAGAR: ${formatPrice(total)}*\n\n`;
-      mensaje += `👤 *Mis datos:* ${name}`;
-
-      const numeroWhatsApp = "595981000000"; // Número Paraguay
-      const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensaje)}`;
-
-      window.open(url, '_blank');
-    };
-
-    // Run
-    init();
-  </script>
+  <script src="./src/main.js"></script>
 </body>
 
 </html>
