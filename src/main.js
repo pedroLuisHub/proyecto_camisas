@@ -5,7 +5,10 @@ const sizesKids = ["2", "4", "6", "8", "10", "12", "14", "16"];
 const sizesAdults = ["P", "M", "G", "GG"];
 
 const countries = [
-  { name: "Paraguay", color: "D30026", text: "ffffff", realImg: "/images/cam_py_premium.png" },
+  {
+    name: "Paraguay", color: "D30026", text: "ffffff", adultoPremiumImgPy: "/images/cam_py_premium.jpg",
+    kidsPremiumImgPy: "/images/conjunto_premium_py.png", imagenTest: "/images/imagen_test.jpeg"
+  },
   { name: "Argentina", color: "75aadb", text: "ffffff" },
   { name: "Brasil", color: "fedd00", text: "009b3a" },
   { name: "Portugal", color: "E32636", text: "ffffff" }
@@ -20,7 +23,7 @@ countries.forEach(c => {
     id: idCounter++,
     name: `${c.name} Premium Adulto`,
     price: 120000,
-    image: c.realImg || `https://placehold.co/600x800/${c.color}/${c.text}?text=${c.name}+Premium`,
+    image: c.adultoPremiumImgPy || `https://placehold.co/600x800/${c.color}/${c.text}?text=${c.name}+Premium`,
     sizes: sizesAdults,
     country: c.name,
     badge: "Premium Quality"
@@ -30,7 +33,7 @@ countries.forEach(c => {
     id: idCounter++,
     name: `Conjunto Premium Kids ${c.name}`,
     price: 120000,
-    image: `https://placehold.co/600x800/${c.color}/${c.text}?text=Conj.+${c.name}+Kids`,
+    image: c.kidsPremiumImgPy || `https://placehold.co/600x800/${c.color}/${c.text}?text=Conj.+${c.name}+Kids`,
     sizes: sizesKids,
     country: c.name,
     badge: "Incluye Short"
@@ -40,7 +43,7 @@ countries.forEach(c => {
     id: idCounter++,
     name: `${c.name} Económica Adulto`,
     price: 50000,
-    image: `https://placehold.co/600x800/${c.color}/${c.text}?text=${c.name}+Eco`,
+    image: c.imagenTest || `https://placehold.co/600x800/${c.color}/${c.text}?text=${c.name}+Eco`,
     sizes: sizesAdults,
     country: c.name,
     badge: "Económica"
@@ -178,7 +181,7 @@ const renderProducts = (items) => {
   for (const country in grouped) {
     // Render Section Header
     const sectionHeader = document.createElement('div');
-    sectionHeader.className = "col-span-1 sm:col-span-2 lg:col-span-3 mt-12 mb-2 border-b-2 border-gray-100 pb-3 flex items-center gap-3";
+    sectionHeader.className = "col-span-full mt-10 mb-2 border-b-2 border-gray-100 pb-3 flex items-center gap-3";
     sectionHeader.innerHTML = `<h2 class="font-heading text-3xl font-black text-dark uppercase">${country}</h2>`;
     productsContainer.appendChild(sectionHeader);
 
@@ -195,7 +198,7 @@ const renderProducts = (items) => {
       card.className = 'product-card bg-white rounded-2xl overflow-hidden border border-gray-100 flex flex-col group';
       card.innerHTML = `
                   <div class="relative overflow-hidden aspect-[4/5] bg-gray-100 group cursor-pointer" onclick="openImageViewer('${product.image}', '${product.name}')">
-                      <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover group-hover:scale-110 transition duration-700 ease-in-out">
+                      <img src="${product.image}" alt="${product.name}" loading="lazy" decoding="async" class="w-full h-full object-cover group-hover:scale-110 transition duration-700 ease-in-out">
                       <div class="absolute top-4 left-4 ${badgeBg} text-[10px] uppercase font-bold px-3 py-1.5 rounded flex items-center gap-1.5 backdrop-blur-md shadow-sm">
                           <i class="fa-solid ${badgeIcon} ${badgeColor}"></i> ${product.badge}
                       </div>
@@ -205,21 +208,21 @@ const renderProducts = (items) => {
                           </div>
                       </div>
                   </div>
-                  <div class="p-6 flex flex-col flex-1 bg-white">
-                      <h3 class="font-heading font-black text-xl mb-1 text-dark truncate" title="${product.name}">${product.name}</h3>
-                      <p class="font-bold text-albirroja text-xl mb-5">${formatPrice(product.price)}</p>
+                  <div class="p-4 sm:p-5 flex flex-col flex-1 bg-white">
+                      <h3 class="font-heading font-black text-lg sm:text-xl mb-1 text-dark truncate" title="${product.name}">${product.name}</h3>
+                      <p class="font-bold text-albirroja text-lg sm:text-lg mb-4">${formatPrice(product.price)}</p>
                       
                       <div class="mt-auto space-y-3">
                           <div class="relative">
-                              <label class="text-xs text-gray-500 font-bold uppercase tracking-wide mb-1.5 block">Seleccionar Talle</label>
-                              <select class="w-full appearance-none bg-gray-50 border border-gray-200 text-dark font-medium rounded-xl px-4 py-3 focus:outline-none focus:border-albirroja focus:ring-1 focus:ring-albirroja transition" id="size-${product.id}">
+                              <label class="text-[10px] sm:text-xs text-gray-500 font-bold uppercase tracking-wide mb-1.5 block">Seleccionar Talle</label>
+                              <select class="w-full appearance-none bg-gray-50 border border-gray-200 text-dark font-medium rounded-xl px-3 sm:px-4 py-2.5 sm:py-3 text-sm focus:outline-none focus:border-albirroja focus:ring-1 focus:ring-albirroja transition" id="size-${product.id}">
                                   ${sizesHTML}
                               </select>
                               <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 pt-6 text-gray-500">
                                   <i class="fa-solid fa-chevron-down text-xs"></i>
                               </div>
                           </div>
-                          <button class="w-full bg-dark hover:bg-albirroja text-white font-bold py-3.5 rounded-xl transition-colors duration-300 flex items-center justify-center gap-2 group-hover:shadow-lg" onclick="addToCart(${product.id})">
+                          <button class="w-full bg-dark hover:bg-albirroja text-white font-bold py-3 rounded-xl transition-colors duration-300 flex items-center justify-center gap-2 text-sm sm:text-base group-hover:shadow-lg" onclick="addToCart(${product.id})">
                               <i class="fa-solid fa-cart-plus"></i> Agregar al Carrito
                           </button>
                       </div>

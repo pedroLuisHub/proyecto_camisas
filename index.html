@@ -57,7 +57,7 @@
   </header>
 
   <!-- Hero -->
-  <section class="premium-bg text-white py-24 md:py-32 px-4 text-center">
+  <section class="premium-bg text-white py-8 md:py-8 px-3 text-center">
     <div class="container mx-auto max-w-4xl">
       <span
         class="inline-block py-1.5 px-4 border border-white/30 rounded-full text-xs font-bold tracking-widest uppercase mb-6 backdrop-blur-sm">Mundial
@@ -65,8 +65,8 @@
       <h1 class="font-heading text-4xl md:text-6xl lg:text-7xl font-black mb-6 leading-tight">MatheoSport: La Piel
         de la Albirroja y el Mundo</h1>
       <p class="text-xl md:text-2xl text-gray-300 mb-10 max-w-2xl mx-auto font-light block">Calidad Premium
-        garantizada. <br class="hidden md:block"> <span class="font-semibold text-white tracking-wide">Orgullosamente de
-          origen Paraguayo 🇵🇾 con envíos a
+        garantizada. <br class="hidden md:block"> <span class="font-semibold text-white tracking-wide">Orgullosamente
+          una tienda Paraguaya con envíos a
           todo el país.</span></p>
       <a href="#shop"
         class="bg-albirroja hover:bg-red-700 text-white font-bold py-4 px-10 rounded-full transition inline-flex items-center gap-3 text-lg shadow-lg shadow-red-600/30">
@@ -107,7 +107,7 @@
         <span id="results-count" class="text-sm font-medium text-gray-500 bg-gray-100 px-3 py-1 rounded-full"></span>
       </div>
 
-      <div id="products-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div id="products-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
         <!-- Products JS -->
       </div>
 
@@ -144,19 +144,25 @@
   </footer>
 
   <!-- Image Viewer Modal -->
-  <div id="image-viewer" class="fixed inset-0 z-[60] bg-dark/95 backdrop-blur-md hidden items-center justify-center p-4 md:p-10 transition-all duration-300">
-    <button id="close-viewer" class="absolute top-6 right-6 w-12 h-12 rounded-full bg-white/10 text-white hover:bg-white/20 transition flex items-center justify-center z-[70]">
+  <div id="image-viewer"
+    class="fixed inset-0 z-[60] bg-dark/95 backdrop-blur-md hidden items-center justify-center p-4 md:p-10 transition-all duration-300">
+    <button id="close-viewer"
+      class="absolute top-6 right-6 w-12 h-12 rounded-full bg-white/10 text-white hover:bg-white/20 transition flex items-center justify-center z-[70]">
       <i class="fa-solid fa-xmark text-2xl"></i>
     </button>
-    
+
     <div class="relative w-full h-full flex items-center justify-center overflow-hidden">
-        <img id="viewer-img" src="" alt="Vista ampliada" class="max-w-full max-h-full object-contain cursor-zoom-in transition-transform duration-300" style="transform-origin: center center;">
+      <img id="viewer-img" src="" alt="Vista ampliada"
+        class="max-w-full max-h-full object-contain cursor-zoom-in transition-transform duration-300"
+        style="transform-origin: center center;">
     </div>
-    
-    <div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex items-center gap-4 bg-dark/50 backdrop-blur-md border border-white/10 rounded-full px-6 py-3 text-white text-xs font-bold uppercase tracking-widest z-[70]">
-        <span class="flex items-center gap-2"><i class="fa-solid fa-magnifying-glass-plus text-albirroja"></i> Click para Zoom</span>
-        <div class="w-px h-4 bg-white/20"></div>
-        <span id="viewer-name">Nombre del producto</span>
+
+    <div
+      class="absolute bottom-10 left-1/2 -translate-x-1/2 flex items-center gap-4 bg-dark/50 backdrop-blur-md border border-white/10 rounded-full px-6 py-3 text-white text-xs font-bold uppercase tracking-widest z-[70]">
+      <span class="flex items-center gap-2"><i class="fa-solid fa-magnifying-glass-plus text-albirroja"></i> Click para
+        Zoom</span>
+      <div class="w-px h-4 bg-white/20"></div>
+      <span id="viewer-name">Nombre del producto</span>
     </div>
   </div>
 
