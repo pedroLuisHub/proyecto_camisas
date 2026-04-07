@@ -4,8 +4,18 @@
 const sizesKids = ["2", "4", "6", "8", "10", "12", "14", "16"];
 const sizesAdults = ["P", "M", "G", "GG"];
 
+// Senior Pathing Hub: Fixes paths automatically for Local vs Web Server
+const solvePath = (path) => {
+  if (!path) return '';
+  if (path.startsWith('http')) return path;
+  const protocol = window.location.protocol;
+  const isFile = protocol === 'file:';
+  const cleanPath = path.startsWith('/') ? path : '/' + path;
+  return isFile ? './public' + cleanPath : cleanPath;
+};
+
 const countries = [
-  { name: "Paraguay", color: "D30026", text: "ffffff", realImg: "images/cam_py_premium.png" },
+  { name: "Paraguay", color: "D30026", text: "ffffff", realImg: "/images/cam_py_premium.png" },
   { name: "Argentina", color: "75aadb", text: "ffffff" },
   { name: "Brasil", color: "fedd00", text: "009b3a" },
   { name: "Portugal", color: "E32636", text: "ffffff" }
@@ -20,7 +30,7 @@ countries.forEach(c => {
     id: idCounter++,
     name: `${c.name} Premium Adulto`,
     price: 120000,
-    image: c.realImg || `https://placehold.co/600x800/${c.color}/${c.text}?text=${c.name}+Premium`,
+    image: solvePath(c.realImg) || `https://placehold.co/600x800/${c.color}/${c.text}?text=${c.name}+Premium`,
     sizes: sizesAdults,
     country: c.name,
     badge: "Premium Quality"

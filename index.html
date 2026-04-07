@@ -23,9 +23,21 @@
       }
     }
   </script>
-  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <script>
+    // Senior Path Hub: Fixes local vs server paths for static tags
+    document.addEventListener('DOMContentLoaded', () => {
+      const isFile = window.location.protocol === 'file:';
+      if (isFile) {
+        document.querySelectorAll('img[src^="/images/"], link[href^="/favicon.svg"]').forEach(el => {
+          const attr = el.tagName === 'IMG' ? 'src' : 'href';
+          el[attr] = './public' + el.getAttribute(attr);
+        });
+      }
+    });
+  </script>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-  <link href="style.css" rel="stylesheet">
+  <link href="/src/style.css" rel="stylesheet">
 </head>
 
 <body class="albirroja-bg-content text-gray-800 pt-20">
@@ -34,7 +46,7 @@
   <header class="fixed w-full bg-white/95 backdrop-blur-sm shadow-sm z-40 top-0 transition-all h-20 flex items-center">
     <div class="container mx-auto px-4 md:px-6 flex justify-between items-center">
       <div class="flex items-center gap-2 cursor-pointer" onclick="window.scrollTo(0,0)">
-        <img src="images/logo_matheo_sport.png" alt="MatheoSport Logo"
+        <img src="/images/logo_matheo_sport.png" alt="MatheoSport Logo"
           class="h-12 md:h-16 w-auto object-contain">
         <span
           class="font-heading font-black text-xl md:text-2xl tracking-tighter text-dark uppercase">MatheoSport</span>
@@ -123,7 +135,7 @@
   <footer id="footer" class="bg-dark text-white py-12 border-t-4 border-albirroja mt-10">
     <div class="container mx-auto px-4 md:px-6 flex flex-col md:flex-row justify-between items-center gap-6">
       <div class="flex items-center gap-2">
-        <img src="images/logo_matheo_sport.png" alt="MatheoSport Logo"
+        <img src="/images/logo_matheo_sport.png" alt="MatheoSport Logo"
           class="h-14 w-auto object-contain bg-white/10 rounded-lg p-1">
         <span class="font-heading font-black text-2xl tracking-tighter uppercase">MatheoSport</span>
       </div>
@@ -206,7 +218,7 @@
     </div>
   </div>
 
-  <script src="main.js"></script>
+  <script src="/src/main.js"></script>
 </body>
 
 </html>
