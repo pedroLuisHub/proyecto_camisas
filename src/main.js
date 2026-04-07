@@ -5,7 +5,7 @@ const sizesKids = ["2", "4", "6", "8", "10", "12", "14", "16"];
 const sizesAdults = ["P", "M", "G", "GG"];
 
 const countries = [
-  { name: "Paraguay", color: "D30026", text: "ffffff", realImg: "public/images/cam_py_premium.png" },
+  { name: "Paraguay", color: "D30026", text: "ffffff", realImg: "/images/cam_py_premium.png" },
   { name: "Argentina", color: "75aadb", text: "ffffff" },
   { name: "Brasil", color: "fedd00", text: "009b3a" },
   { name: "Portugal", color: "E32636", text: "ffffff" }
