@@ -7,7 +7,7 @@ const sizesAdults = ["P", "M", "G", "GG"];
 const countries = [
   {
     name: "Paraguay", color: "D30026", text: "ffffff", adultoPremiumImgPy: "/images/cam_py_premium.jpg",
-    kidsPremiumImgPy: "/images/conjunto_premium_py.png", imagenTest: "/images/imagen_test.jpeg"
+    kidsPremiumImgPy: "/images/conjunto_premium_py.png", kidsEcoImgPy: "/images/conjunto_eco_py.png", adultoEcoImgPy: "/images/cam_eco_py.png"
   },
   { name: "Argentina", color: "75aadb", text: "ffffff" },
   { name: "Brasil", color: "fedd00", text: "009b3a" },
@@ -43,7 +43,7 @@ countries.forEach(c => {
     id: idCounter++,
     name: `${c.name} Económica Adulto`,
     price: 50000,
-    image: c.imagenTest || `https://placehold.co/600x800/${c.color}/${c.text}?text=${c.name}+Eco`,
+    image: c.adultoEcoImgPy || `https://placehold.co/600x800/${c.color}/${c.text}?text=${c.name}+Eco`,
     sizes: sizesAdults,
     country: c.name,
     badge: "Económica"
@@ -53,7 +53,7 @@ countries.forEach(c => {
     id: idCounter++,
     name: `${c.name} Económica Kids`,
     price: 50000,
-    image: `https://placehold.co/600x800/${c.color}/${c.text}?text=${c.name}+Kids+Eco`,
+    image: c.kidsEcoImgPy || `https://placehold.co/600x800/${c.color}/${c.text}?text=${c.name}+Kids+Eco`,
     sizes: sizesKids,
     country: c.name,
     badge: "Económica"
