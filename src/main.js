@@ -8,30 +8,30 @@ const countries = [
   {
     name: "Paraguay", color: "D30026", text: "ffffff",
     adultoPremiumImg: "/images/cam_py_premium.jpg",
-    kidsPremiumImg: "/images/conjunto_premium_py.png",
-    kidsEcoImg: "/images/conjunto_eco_py.png",
-    adultoEcoImg: "/images/cam_eco_py.png"
+    kidsPremiumImg: "/images/conjunto_premium_py.jpg",
+    kidsEcoImg: "/images/conjunto_eco_py.jpg",
+    adultoEcoImg: "/images/cam_eco_py.jpg"
   },
   {
     name: "Argentina", color: "75aadb", text: "ffffff",
-    adultoEcoImg: "/images/proximamente_ar.png",
-    kidsEcoImg: "/images/proximamente_ar.png",
-    kidsPremiumImg: "/images/proximamente_ar.png",
-    adultoPremiumImg: "/images/proximamente_ar.png"
+    adultoEcoImg: "/images/proximamente_ar.jpg",
+    kidsEcoImg: "/images/proximamente_ar.jpg",
+    kidsPremiumImg: "/images/proximamente_ar.jpg",
+    adultoPremiumImg: "/images/proximamente_ar.jpg"
   },
   {
     name: "Brasil", color: "fedd00", text: "009b3a",
-    adultoEcoImg: "/images/cam_eco_br.png",
-    kidsEcoImg: "/images/conjunto_eco_br.png",
-    kidsPremiumImg: "/images/proximamente_br.png",
-    adultoPremiumImg: "/images/proximamente_br.png"
+    adultoEcoImg: "/images/cam_eco_br.jpg",
+    kidsEcoImg: "/images/conjunto_eco_br.jpg",
+    kidsPremiumImg: "/images/proximamente_br.jpg",
+    adultoPremiumImg: "/images/proximamente_br.jpg"
   },
   {
     name: "Portugal", color: "E32636", text: "ffffff",
-    adultoEcoImg: "/images/proximamente_pl.png",
-    kidsEcoImg: "/images/proximamente_pl.png",
-    kidsPremiumImg: "/images/proximamente_pl.png",
-    adultoPremiumImg: "/images/proximamente_pl.png"
+    adultoEcoImg: "/images/proximamente_pl.jpg",
+    kidsEcoImg: "/images/proximamente_pl.jpg",
+    kidsPremiumImg: "/images/proximamente_pl.jpg",
+    adultoPremiumImg: "/images/proximamente_pl.jpg"
   }
 ];
 
@@ -430,6 +430,9 @@ const formatearYEnviarWhatsApp = (name) => {
   window.open(url, '_blank');
 };
 
+const viewportMeta = document.querySelector('meta[name="viewport"]');
+const defaultViewport = viewportMeta ? viewportMeta.getAttribute('content') : '';
+
 const openImageViewer = (url, name) => {
   viewerImg.src = url;
   viewerName.innerText = name;
@@ -440,14 +443,40 @@ const openImageViewer = (url, name) => {
   viewerImg.style.transform = 'scale(1)';
   viewerImg.classList.add('cursor-zoom-in');
   viewerImg.classList.remove('cursor-zoom-out');
+
+  // Bloquear zoom del navegador en móvil mientras se ve la imagen
+  if (viewportMeta) {
+    viewportMeta.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no');
+  }
 };
 
 const closeImageViewer = () => {
   imageViewer.classList.add('hidden');
   imageViewer.classList.remove('flex');
+  isZoomed = false;
+  viewerImg.style.transform = 'scale(1)';
+  viewerImg.classList.add('cursor-zoom-in');
+  viewerImg.classList.remove('cursor-zoom-out');
+
   if (!cartDrawer.classList.contains('active')) {
     document.body.style.overflow = '';
   }
+
+  // Restaurar viewport normal para permitir zoom del navegador
+  if (viewportMeta) {
+    viewportMeta.setAttribute('content', defaultViewport);
+  }
+
+  // Forzar reset del zoom de la página en caso de que esté ampliada
+  // Pequeño truco: cambiar y restaurar el viewport para resetear cualquier zoom residual
+  requestAnimationFrame(() => {
+    if (viewportMeta) {
+      viewportMeta.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0');
+      requestAnimationFrame(() => {
+        viewportMeta.setAttribute('content', defaultViewport);
+      });
+    }
+  });
 };
 
 // Make these functions available globally for inline onclick handlers in HTML
