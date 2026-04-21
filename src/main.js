@@ -81,6 +81,7 @@ countries.forEach(c => {
   });
 });
 
+let activeCountryFilters = [];
 let activeFilters = [];
 let cart = []; // { product, size, qty }
 
@@ -92,6 +93,7 @@ const formatPrice = (price) => {
 const productsContainer = document.getElementById('products-container');
 const filterKidsContainer = document.getElementById('filter-kids');
 const filterAdultsContainer = document.getElementById('filter-adults');
+const filterCountriesContainer = document.getElementById('filter-countries');
 const clearFiltersBtn = document.getElementById('clear-filters');
 const resultsCountTag = document.getElementById('results-count');
 const noProductsTag = document.getElementById('no-products');
@@ -134,6 +136,15 @@ const renderFilters = () => {
 
   sizesKids.forEach(size => createFilterBtn(size, filterKidsContainer));
   sizesAdults.forEach(size => createFilterBtn(size, filterAdultsContainer));
+
+  // Countries
+  countries.forEach(c => {
+    const btn = document.createElement('button');
+    btn.className = 'px-3 h-10 rounded-lg bg-gray-50 border border-gray-200 text-xs font-bold text-gray-600 flex items-center justify-center transition-all hover:border-albirroja hover:text-albirroja toggle-country-btn whitespace-nowrap';
+    btn.innerText = c.name;
+    btn.addEventListener('click', () => toggleCountryFilter(c.name, btn));
+    filterCountriesContainer.appendChild(btn);
+  });
 };
 
 const toggleFilter = (size, btnHTML) => {
@@ -147,34 +158,67 @@ const toggleFilter = (size, btnHTML) => {
     btnHTML.classList.add('bg-albirroja', 'text-white', 'border-albirroja', 'shadow-md');
   }
 
-  if (activeFilters.length > 0) {
+  updateClearButtonVisibility();
+  applyFilters();
+};
+
+const toggleCountryFilter = (countryName, btnHTML) => {
+  if (activeCountryFilters.includes(countryName)) {
+    activeCountryFilters = activeCountryFilters.filter(c => c !== countryName);
+    btnHTML.classList.remove('bg-dark', 'text-white', 'border-dark', 'shadow-md');
+    btnHTML.classList.add('bg-gray-50', 'text-gray-600', 'border-gray-200');
+  } else {
+    activeCountryFilters.push(countryName);
+    btnHTML.classList.remove('bg-gray-50', 'text-gray-600', 'border-gray-200');
+    btnHTML.classList.add('bg-dark', 'text-white', 'border-dark', 'shadow-md');
+  }
+
+  updateClearButtonVisibility();
+  applyFilters();
+};
+
+const updateClearButtonVisibility = () => {
+  if (activeFilters.length > 0 || activeCountryFilters.length > 0) {
     clearFiltersBtn.classList.remove('hidden');
   } else {
     clearFiltersBtn.classList.add('hidden');
   }
-
-  applyFilters();
 };
 
 clearFiltersBtn.addEventListener('click', () => {
   activeFilters = [];
+  activeCountryFilters = [];
+
   document.querySelectorAll('.toggle-size-btn').forEach(btn => {
     btn.classList.remove('bg-albirroja', 'text-white', 'border-albirroja', 'shadow-md');
     btn.classList.add('bg-gray-50', 'text-gray-600', 'border-gray-200');
   });
+
+  document.querySelectorAll('.toggle-country-btn').forEach(btn => {
+    btn.classList.remove('bg-dark', 'text-white', 'border-dark', 'shadow-md');
+    btn.classList.add('bg-gray-50', 'text-gray-600', 'border-gray-200');
+  });
+
   clearFiltersBtn.classList.add('hidden');
   applyFilters();
 });
 
 const applyFilters = () => {
-  if (activeFilters.length === 0) {
-    renderProducts(products);
-    return;
+  let filtered = products;
+
+  // Filter by size
+  if (activeFilters.length > 0) {
+    filtered = filtered.filter(p => {
+      return activeFilters.some(filterSize => p.sizes.includes(filterSize));
+    });
   }
 
-  const filtered = products.filter(p => {
-    return activeFilters.some(filterSize => p.sizes.includes(filterSize));
-  });
+  // Filter by country
+  if (activeCountryFilters.length > 0) {
+    filtered = filtered.filter(p => {
+      return activeCountryFilters.includes(p.country);
+    });
+  }
 
   renderProducts(filtered);
 };
@@ -424,7 +468,7 @@ const formatearYEnviarWhatsApp = (name) => {
   mensaje += `💰 *TOTAL A PAGAR: ${formatPrice(total)}*\n\n`;
   mensaje += `👤 *Mis datos:* ${name}`;
 
-  const numeroWhatsApp = "595981000000"; // Número Paraguay
+  const numeroWhatsApp = "595972368026"; // Número Paraguay
   const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensaje)}`;
 
   window.open(url, '_blank');
